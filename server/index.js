@@ -60,7 +60,7 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.index({ email: 1 }, { unique: true });
+
 projectSchema.index({ "members.user": 1 });
 taskSchema.index({ project: 1, status: 1 });
 taskSchema.index({ assignee: 1, status: 1 });
