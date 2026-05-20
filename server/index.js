@@ -530,7 +530,50 @@ app.delete(
   })
 );
 
+app.use((err, _req, res, _next) => {
+  if (err instanceof z.ZodError) {
+    return res.status(400).json({
+      message: "Validation failed",
+      issues: err.issues.map((issue) => ({
+        path: issue.path.join("."),
+        message: issue.message
+      }))
+    });
+  }
+
+  if (err.name === "CastError") {
+    return res.status(400).json({ message: "Invalid id" });
+  }
+
+  if (err.code === 11000) {
+    return res.status(409).json({ message: "Duplicate value already exists" });
+  }
+
+  const status = err.status || 500;
+  res.status(status).json({ message: err.message || "Something went wrong" });
+});
+
 const clientDist = path.join(__dirname, "..", "dist");
+
+app.use(express.static(clientDist));
+
+app.get(/^\/(?!api).*/, (_req, res) => {
+  res.sendFile(path.join(clientDist, "index.html"));
+});
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+
+    app.listen(PORT, () => {
+      console.log(`Ethara Teams running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection failed:", error.message);
+    process.exit(1);
+  });
 app.use(express.static(clientDist));
 app.get(/.*/, (_req, res) => {
   res.sendFile(path.join(clientDist, "index.html"));
