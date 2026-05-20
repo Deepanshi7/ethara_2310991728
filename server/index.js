@@ -15,7 +15,12 @@ const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/team-t
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "*",
+    credentials: true
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 
 const userSchema = new mongoose.Schema(
