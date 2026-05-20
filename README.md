@@ -6,7 +6,7 @@ Ethara Teams is a full-stack team task manager built for project planning, task 
 
 Add these after deployment:
 
-- Live URL: `YOUR_RAILWAY_URL`
+- Live URL: [VERCEL URL](https://ethara-2310991728.vercel.app/)
 - GitHub Repository: [Ethara Repository](https://github.com/Deepanshi7/ethara_2310991728)
 - Demo Video: `YOUR_DEMO_VIDEO_URL`
 
